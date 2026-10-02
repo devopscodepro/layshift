@@ -5,11 +5,13 @@ import SwiftUI
 final class SettingsWindowController: NSObject, NSWindowDelegate {
     private let sources: InputSourceStore
     private let settings: SettingsStore
+    private let shortcuts: ShortcutController
     private var window: NSWindow?
 
-    init(sources: InputSourceStore, settings: SettingsStore) {
+    init(sources: InputSourceStore, settings: SettingsStore, shortcuts: ShortcutController) {
         self.sources = sources
         self.settings = settings
+        self.shortcuts = shortcuts
     }
 
     func show() {
@@ -36,12 +38,12 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
         let tabs = NSTabViewController()
         tabs.tabStyle = .toolbar
         tabs.addTabViewItem(tab(
-            ShortcutsSettingsView(sources: sources),
+            ShortcutsSettingsView(sources: sources, settings: settings, shortcuts: shortcuts),
             title: String(localized: "Shortcuts"),
             symbol: "keyboard"
         ))
         tabs.addTabViewItem(tab(
-            GeneralSettingsView(settings: settings),
+            GeneralSettingsView(settings: settings, sources: sources, shortcuts: shortcuts),
             title: String(localized: "General"),
             symbol: "gearshape"
         ))

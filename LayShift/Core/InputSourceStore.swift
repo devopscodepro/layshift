@@ -5,12 +5,16 @@ import Carbon.HIToolbox
 final class InputSourceStore: ObservableObject {
     @Published private(set) var sources: [InputSource] = []
     @Published private(set) var current: InputSource?
+    // an input method was selected but the nudge that makes it take effect was not possible
+    @Published private(set) var nudgeFailed = false
 
     private let service: InputSourceProviding
+    private let nudge: InputSourceNudging?
     private let notifications: DistributedNotificationCenter
 
-    init(service: InputSourceProviding, notifications: DistributedNotificationCenter = .default()) {
+    init(service: InputSourceProviding, nudge: InputSourceNudging? = nil, notifications: DistributedNotificationCenter = .default()) {
         self.service = service
+        self.nudge = nudge
         self.notifications = notifications
         refresh()
 
@@ -46,10 +50,19 @@ final class InputSourceStore: ObservableObject {
         service.icon(for: source)
     }
 
+    var hasInputMethods: Bool {
+        sources.contains { $0.kind == .inputMode }
+    }
+
     func select(_ source: InputSource) {
+        let previous = current
         guard service.select(source) else { return }
         current = source
         Log.sources.debug("Selected \(source.id, privacy: .public)")
+
+        if Self.needsNudge(from: previous, to: source) {
+            nudgeFailed = nudge?.nudge() != true
+        }
     }
 
     func selectNext() {
@@ -61,6 +74,12 @@ final class InputSourceStore: ObservableObject {
         guard !sources.isEmpty else { return nil }
         guard let source, let index = sources.firstIndex(of: source) else { return sources.first }
         return sources[(index + 1) % sources.count]
+    }
+
+    // layout ↔ layout and input method ↔ input method switches take effect on their own
+    static func needsNudge(from previous: InputSource?, to source: InputSource) -> Bool {
+        guard let previous else { return source.kind == .inputMode }
+        return previous.kind != source.kind
     }
 
     @objc private func systemChanged(_ notification: Notification) {

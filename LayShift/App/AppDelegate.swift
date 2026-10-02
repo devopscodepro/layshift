@@ -4,6 +4,7 @@ import AppKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var sources: InputSourceStore?
     private var settings: SettingsStore?
+    private var shortcuts: ShortcutController?
     private var menuBar: MenuBarController?
     private var settingsWindow: SettingsWindowController?
 
@@ -11,16 +12,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // unit tests use the app as a host, keep the menu bar clean there
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
 
-        let sources = InputSourceStore(service: TISInputSourceService())
+        let sources = InputSourceStore(service: TISInputSourceService(), nudge: SystemShortcutNudge())
         let settings = SettingsStore()
-        let settingsWindow = SettingsWindowController(sources: sources, settings: settings)
+        let shortcuts = ShortcutController(sources: sources, settings: settings)
+        let settingsWindow = SettingsWindowController(sources: sources, settings: settings, shortcuts: shortcuts)
         self.sources = sources
         self.settings = settings
+        self.shortcuts = shortcuts
         self.settingsWindow = settingsWindow
         menuBar = MenuBarController(sources: sources, settings: settings) {
             settingsWindow.show()
         }
         installMainMenu()
+        shortcuts.rebind()
 
         if !settings.showsMenuBarIcon || isFirstLaunch {
             settingsWindow.show()
