@@ -58,7 +58,11 @@ final class InputSourceStore: ObservableObject {
 
     func select(_ source: InputSource) {
         let previous = pendingSource ?? current
-        guard service.select(source) else { return }
+        guard service.select(source) else {
+            // the list may be stale, e.g. the source was removed in System Settings
+            refresh()
+            return
+        }
         current = source
         pending = nil
         Log.sources.debug("Selected \(source.id, privacy: .public)")

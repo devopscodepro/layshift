@@ -59,3 +59,18 @@ struct InputSourceStoreTests {
         #expect(InputSource(id: "x", name: "Custom", kind: .keyboardLayout, languages: []).shortCode == "CU")
     }
 }
+
+@MainActor
+struct InputSourceStoreStaleListTests {
+    @Test func failedSelectRefreshesTheList() {
+        let service = MockInputSourceService(sources: [.abc, .russian, .hiragana], current: .russian)
+        let store = InputSourceStore(service: service)
+
+        service.sources = [.abc, .russian]
+        service.selectSucceeds = false
+        store.selectNext()
+
+        #expect(store.sources == [.abc, .russian])
+        #expect(store.next(after: .russian) == .abc)
+    }
+}

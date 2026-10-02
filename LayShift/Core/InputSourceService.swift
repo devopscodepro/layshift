@@ -14,21 +14,32 @@ protocol InputSourceProviding: AnyObject {
 final class TISInputSourceService: InputSourceProviding {
     private var references: [String: TISInputSource] = [:]
 
+    // Two TIS quirks: a property filter keeps listing an input mode after its input method was
+    // turned off, and a long-running process keeps such orphans in the unfiltered list too.
+    // The Input menu never shows them, so modes without their input method are dropped here.
     func enabledSources() -> [InputSource] {
-        let filter = [
-            kTISPropertyInputSourceCategory as String: kTISCategoryKeyboardInputSource as String,
-            kTISPropertyInputSourceIsEnabled as String: true,
-            kTISPropertyInputSourceIsSelectCapable as String: true,
-        ] as CFDictionary
-        guard let list = TISCreateInputSourceList(filter, false)?.takeRetainedValue() as? [TISInputSource] else {
+        guard let list = TISCreateInputSourceList(nil, false)?.takeRetainedValue() as? [TISInputSource] else {
             Log.sources.error("TISCreateInputSourceList returned nothing")
             return []
         }
+        let keyboard = list.filter {
+            Self.property($0, kTISPropertyInputSourceCategory) as? String == kTISCategoryKeyboardInputSource as String
+        }
+        let inputMethods = Set(keyboard.compactMap { reference -> String? in
+            guard Self.property(reference, kTISPropertyInputSourceType) as? String == kTISTypeKeyboardInputMethodModeEnabled as String else { return nil }
+            return Self.property(reference, kTISPropertyBundleID) as? String
+        })
 
         var seen: Set<String> = []
         var result: [InputSource] = []
-        for reference in list {
-            guard let source = Self.inputSource(from: reference), seen.insert(source.id).inserted else { continue }
+        for reference in keyboard {
+            guard Self.property(reference, kTISPropertyInputSourceIsSelectCapable) as? Bool == true,
+                  let source = Self.inputSource(from: reference) else { continue }
+            if source.kind == .inputMode,
+               let bundle = Self.property(reference, kTISPropertyBundleID) as? String, !inputMethods.contains(bundle) {
+                continue
+            }
+            guard seen.insert(source.id).inserted else { continue }
             references[source.id] = reference
             result.append(source)
         }
@@ -46,10 +57,17 @@ final class TISInputSourceService: InputSourceProviding {
             return false
         }
         let status = TISSelectInputSource(reference)
-        if status != noErr {
+        guard status == noErr else {
             Log.sources.error("TISSelectInputSource(\(source.id, privacy: .public)) failed: \(status)")
+            return false
         }
-        return status == noErr
+        // macOS reports success for a source it quietly refused, e.g. one that was just disabled
+        guard currentSource()?.id == source.id else {
+            Log.sources.error("macOS did not switch to \(source.id, privacy: .public)")
+            references[source.id] = nil
+            return false
+        }
+        return true
     }
 
     // sources that only have a legacy IconRef get no icon: the API to draw one is deprecated
