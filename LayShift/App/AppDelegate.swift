@@ -12,6 +12,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // unit tests use the app as a host, keep the menu bar clean there
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
 
+        // Launch Services caches app icons by path; after an update the Dock and the About panel
+        // can keep showing an old one until the app sets its icon itself
+        if let url = Bundle.main.url(forResource: "AppIcon", withExtension: "icns"), let icon = NSImage(contentsOf: url) {
+            NSApplication.shared.applicationIconImage = icon
+        }
+
         let sources = InputSourceStore(service: TISInputSourceService(), nudge: SystemShortcutNudge())
         let settings = SettingsStore()
         let shortcuts = ShortcutController(sources: sources, settings: settings)
