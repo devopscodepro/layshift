@@ -57,7 +57,6 @@ struct ShortcutRecorder: View {
     }
 
     private func start() {
-        Log.shortcuts.debug("Recorder start")
         isRecording = true
         settings.isRecording = true
         problem = nil
@@ -74,7 +73,6 @@ struct ShortcutRecorder: View {
             NSEvent.removeMonitor(monitor)
         }
         monitor = nil
-        Log.shortcuts.debug("Recorder stop")
         isRecording = false
         settings.isRecording = false
         held = []
@@ -117,7 +115,6 @@ struct ShortcutRecorder: View {
     }
 
     private func accept(_ shortcut: Shortcut) {
-        Log.shortcuts.debug("Recorder accept \(String(describing: shortcut), privacy: .public)")
         if case .key(let combo) = shortcut, SystemShortcuts.isTaken(combo) {
             problem = String(localized: "macOS uses this shortcut to switch input sources.")
             NSSound.beep()

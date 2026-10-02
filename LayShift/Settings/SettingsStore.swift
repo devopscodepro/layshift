@@ -52,7 +52,6 @@ final class SettingsStore: ObservableObject {
     }
 
     func setCycleShortcut(_ shortcut: Shortcut?) {
-        Log.settings.debug("setCycleShortcut \(String(describing: shortcut), privacy: .public)")
         if let shortcut {
             removeEverywhere(shortcut)
         }

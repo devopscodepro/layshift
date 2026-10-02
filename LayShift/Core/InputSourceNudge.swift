@@ -29,7 +29,6 @@ final class SystemShortcutNudge: InputSourceNudging {
     // the system shortcut commits when the modifier is released, so the modifier keys are pressed
     // and released like a person would, not just set as flags on the key
     private func press(_ combo: KeyCombo) {
-        Log.sources.debug("Nudge press")
         let source = CGEventSource(stateID: .combinedSessionState)
         let modifiers: [(NSEvent.ModifierFlags, CGKeyCode, CGEventFlags)] = [
             (.control, CGKeyCode(kVK_Control), .maskControl),

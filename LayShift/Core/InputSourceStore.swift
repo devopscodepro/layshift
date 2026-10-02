@@ -97,6 +97,5 @@ final class InputSourceStore: ObservableObject {
 
     @objc private func systemChanged(_ notification: Notification) {
         refresh()
-        Log.sources.debug("System says current is \(self.current?.id ?? "nil", privacy: .public)")
     }
 }
