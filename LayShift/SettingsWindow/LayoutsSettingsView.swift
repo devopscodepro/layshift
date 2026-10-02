@@ -5,6 +5,8 @@ struct LayoutsSettingsView: View {
     @ObservedObject var settings: SettingsStore
     @ObservedObject var shortcuts: ShortcutController
 
+    @State private var globeKeyIsFree = SystemKeyboard.globeKeyIsFree
+
     var body: some View {
         Form {
             Section {
@@ -32,6 +34,9 @@ struct LayoutsSettingsView: View {
                         action: Permissions.openInputMonitoringSettings
                     )
                 }
+                if settings.usesFunctionKey, !globeKeyIsFree {
+                    GlobeKeyNotice()
+                }
                 if sources.nudgeFailed {
                     PermissionNotice(
                         text: String(localized: "Switching to an input method needs the Accessibility permission and the system shortcut “Select the previous input source”."),
@@ -53,7 +58,13 @@ struct LayoutsSettingsView: View {
         .formStyle(.grouped)
         .frame(width: 480)
         .fixedSize(horizontal: false, vertical: true)
-        .onAppear { sources.refresh() }
+        .onAppear {
+            sources.refresh()
+            globeKeyIsFree = SystemKeyboard.globeKeyIsFree
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
+            globeKeyIsFree = SystemKeyboard.globeKeyIsFree
+        }
     }
 
     // ask at the moment the user needs it, not at launch

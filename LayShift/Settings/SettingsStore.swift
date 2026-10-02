@@ -59,9 +59,20 @@ final class SettingsStore: ObservableObject {
         cycleShortcut = shortcut
     }
 
+    var allShortcuts: [Shortcut] {
+        Array(layoutShortcuts.values) + [cycleShortcut].compactMap { $0 }
+    }
+
     var usesModifierShortcuts: Bool {
-        (Array(layoutShortcuts.values) + [cycleShortcut].compactMap { $0 }).contains { shortcut in
+        allShortcuts.contains { shortcut in
             if case .modifiers = shortcut { return true }
+            return false
+        }
+    }
+
+    var usesFunctionKey: Bool {
+        allShortcuts.contains { shortcut in
+            if case .modifiers(let combo) = shortcut { return combo.keys.contains(.function) }
             return false
         }
     }

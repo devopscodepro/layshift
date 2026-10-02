@@ -10,6 +10,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private var statusItem: NSStatusItem?
     private let menu = NSMenu()
     private let currentItem = NSMenuItem()
+    private let secureInputItem = NSMenuItem()
     private var subscriptions: Set<AnyCancellable> = []
 
     init(sources: InputSourceStore, settings: SettingsStore, openSettings: @escaping () -> Void) {
@@ -33,6 +34,10 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         currentItem.isEnabled = false
         menu.addItem(currentItem)
+        secureInputItem.isEnabled = false
+        secureInputItem.isHidden = true
+        secureInputItem.image = NSImage(systemSymbolName: "lock.fill", accessibilityDescription: nil)
+        menu.addItem(secureInputItem)
         menu.addItem(.separator())
 
         let settingsItem = NSMenuItem(title: String(localized: "Settings…"), action: #selector(showSettings), keyEquivalent: ",")
@@ -69,6 +74,19 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     func menuWillOpen(_ menu: NSMenu) {
         sources.refresh()
+        updateSecureInput()
+    }
+
+    // nothing can be done about it from here, but the user should know why shortcuts went quiet
+    private func updateSecureInput() {
+        guard let app = SystemKeyboard.secureInputApp else {
+            secureInputItem.isHidden = true
+            return
+        }
+        secureInputItem.title = app.isEmpty
+            ? String(localized: "Shortcuts paused: secure input is on")
+            : String(localized: "Shortcuts paused: \(app) uses secure input")
+        secureInputItem.isHidden = false
     }
 
     @objc private func showSettings() {

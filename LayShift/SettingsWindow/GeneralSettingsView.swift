@@ -11,6 +11,8 @@ struct GeneralSettingsView: View {
     @State private var inputMonitoring = Permissions.hasInputMonitoring
     @State private var accessibility = Permissions.hasAccessibility
     @State private var customCycle = false
+    @State private var globeKeyIsFree = SystemKeyboard.globeKeyIsFree
+    @State private var explainHiddenIcon = false
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -44,10 +46,16 @@ struct GeneralSettingsView: View {
                         action: Permissions.openInputMonitoringSettings
                     )
                 }
+                if settings.usesFunctionKey, !globeKeyIsFree {
+                    GlobeKeyNotice()
+                }
             } header: {
                 Text("Switch layouts")
             } footer: {
-                Text("Shortcuts for individual layouts are on the Layouts tab.")
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Shortcuts for individual layouts are on the Layouts tab.")
+                    Text("To switch with Caps Lock, turn on “Use the Caps Lock key to switch to and from ABC” in [Keyboard settings](x-apple.systempreferences:com.apple.Keyboard-Settings.extension).")
+                }
             }
 
             Section {
@@ -64,7 +72,15 @@ struct GeneralSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Toggle(isOn: $settings.showsMenuBarIcon) {
+                Toggle(isOn: Binding(
+                    get: { settings.showsMenuBarIcon },
+                    set: { shown in
+                        settings.showsMenuBarIcon = shown
+                        if !shown, !settings.hideIconExplained {
+                            explainHiddenIcon = true
+                        }
+                    }
+                )) {
                     Text("Show LayShift in the menu bar")
                     Text("Without the icon, open LayShift again to get back to Settings.")
                 }
@@ -118,6 +134,11 @@ struct GeneralSettingsView: View {
         .onReceive(timer) { _ in
             refreshPermissions()
         }
+        .alert(String(localized: "The menu bar icon is now hidden"), isPresented: $explainHiddenIcon) {
+            Button("OK") { settings.hideIconExplained = true }
+        } message: {
+            Text("LayShift keeps working in the background. To open Settings again, launch LayShift from Launchpad, Spotlight or the Applications folder.")
+        }
     }
 
     private var showsRecorder: Bool {
@@ -161,6 +182,7 @@ struct GeneralSettingsView: View {
     private func refresh() {
         launchAtLogin = LaunchAtLogin.isEnabled
         needsApproval = LaunchAtLogin.needsApproval
+        globeKeyIsFree = SystemKeyboard.globeKeyIsFree
         refreshPermissions()
     }
 
@@ -172,6 +194,17 @@ struct GeneralSettingsView: View {
             if monitoring { shortcuts.rebind() }
         }
         accessibility = Permissions.hasAccessibility
+    }
+}
+
+// macOS grabs the 🌐/fn key for itself unless "Press 🌐 key to" is set to Do Nothing
+struct GlobeKeyNotice: View {
+    var body: some View {
+        PermissionNotice(
+            text: String(localized: "macOS also acts on the 🌐 key. Set “Press 🌐 key to” to “Do Nothing” in Keyboard settings."),
+            button: String(localized: "Open Keyboard Settings"),
+            action: SystemKeyboard.openKeyboardSettings
+        )
     }
 }
 
