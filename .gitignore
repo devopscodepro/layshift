@@ -56,3 +56,6 @@ AGENTS.md
 
 # Recraft output
 temp/
+
+# Coverage data from local test runs
+*.profraw
