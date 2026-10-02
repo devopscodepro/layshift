@@ -96,10 +96,10 @@ final class ModifierEventTap: @unchecked Sendable {
             var events: [ModifierTapDetector.Event] = []
             // what a press or release means depends on which keys we saw before,
             // so changes are reported one key at a time
-            for key in held.subtracting(now).sorted(by: { $0.sortOrder < $1.sortOrder }) {
+            for key in held.subtracting(now).sorted(by: { $0.family < $1.family }) {
                 events.append(.modifierUp(key))
             }
-            for key in now.subtracting(held).sorted(by: { $0.sortOrder < $1.sortOrder }) {
+            for key in now.subtracting(held).sorted(by: { $0.family < $1.family }) {
                 events.append(.modifierDown(key))
             }
             held = now
@@ -116,6 +116,6 @@ final class ModifierEventTap: @unchecked Sendable {
     // the per-key bits NSEvent exposes tell left from right
     static func keys(in flags: CGEventFlags) -> Set<ModifierKey> {
         let raw = UInt(flags.rawValue)
-        return Set(ModifierKey.allCases.filter { raw & $0.deviceFlag != 0 })
+        return Set(ModifierKey.physical.filter { raw & $0.deviceFlag != 0 })
     }
 }

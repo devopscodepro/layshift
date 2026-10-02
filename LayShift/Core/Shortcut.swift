@@ -102,9 +102,31 @@ struct ModifierCombo: Codable, Hashable, Sendable {
         !keys.isEmpty
     }
 
-    // "Right ⌘", "Left ⌃⇧", "Left ⌃ + Right ⇧", "fn"
+    // exactly these keys are held: an "either side" key takes one physical key of its family
+    func matches(_ held: Set<ModifierKey>) -> Bool {
+        guard held.count == keys.count else { return false }
+        var remaining = held
+        for key in keys {
+            guard let match = remaining.first(where: { key.accepts($0) }) else { return false }
+            remaining.remove(match)
+        }
+        return remaining.isEmpty
+    }
+
+    // every held key belongs to this combo, with room for more
+    func couldStillMatch(_ held: Set<ModifierKey>) -> Bool {
+        guard held.count < keys.count else { return false }
+        var unused = keys
+        for pressed in held {
+            guard let key = unused.first(where: { $0.accepts(pressed) }) else { return false }
+            unused.remove(key)
+        }
+        return true
+    }
+
+    // "⌃⇧", "Right ⌘", "Left ⌃⇧", "Left ⌃ + Right ⇧", "fn"
     var displayString: String {
-        let sorted = keys.sorted { $0.sortOrder < $1.sortOrder }
+        let sorted = keys.sorted { ($0.family, $0.side == .right) < ($1.family, $1.side == .right) }
         let sides = Set(sorted.compactMap(\.side))
         if sides.count <= 1 {
             let symbols = sorted.map(\.symbol).joined()
@@ -123,6 +145,16 @@ struct ModifierCombo: Codable, Hashable, Sendable {
         case .right: String(localized: "Right")
         }
     }
+}
+
+private extension ModifierKey {
+    func accepts(_ pressed: ModifierKey) -> Bool {
+        isAnySide ? pressed.family == family && pressed.side != nil : pressed == self
+    }
+}
+
+private func < (lhs: (ModifierKey.Family, Bool), rhs: (ModifierKey.Family, Bool)) -> Bool {
+    lhs.0 != rhs.0 ? lhs.0 < rhs.0 : !lhs.1 && rhs.1
 }
 
 enum Shortcut: Codable, Hashable, Sendable {

@@ -26,10 +26,9 @@ struct ModifierTapDetector {
         case .modifierDown(let key):
             held.insert(key)
             guard !contaminated, !fired else { return nil }
-            let combo = ModifierCombo(held)
-            if bindings.contains(combo) {
+            if let combo = bindings.first(where: { $0.matches(held) }) {
                 armed = combo
-            } else if bindings.contains(where: { held.isStrictSubset(of: $0.keys) }) {
+            } else if bindings.contains(where: { $0.couldStillMatch(held) }) {
                 armed = nil
             } else {
                 contaminated = true
@@ -40,7 +39,7 @@ struct ModifierTapDetector {
         case .modifierUp(let key):
             held.remove(key)
             var result: ModifierCombo?
-            if let combo = armed, !contaminated, !fired, combo.keys.contains(key) {
+            if let combo = armed, !contaminated, !fired {
                 fired = true
                 result = combo
             }

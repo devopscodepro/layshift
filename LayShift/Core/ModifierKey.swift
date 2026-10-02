@@ -1,15 +1,24 @@
 import AppKit
 import Carbon.HIToolbox
 
-// a physical modifier key, left and right told apart
+// a modifier key: either a physical one, left and right told apart, or "either side"
 enum ModifierKey: String, Codable, CaseIterable, Hashable, Sendable {
-    case leftControl, rightControl
-    case leftOption, rightOption
-    case leftShift, rightShift
-    case leftCommand, rightCommand
+    case leftControl, rightControl, control
+    case leftOption, rightOption, option
+    case leftShift, rightShift, shift
+    case leftCommand, rightCommand, command
     case function
 
     enum Side: Sendable { case left, right }
+
+    enum Family: Int, Comparable, Sendable {
+        case control, option, shift, command, function
+
+        static func < (lhs: Family, rhs: Family) -> Bool { lhs.rawValue < rhs.rawValue }
+    }
+
+    // the keys a keyboard can actually report
+    static let physical: [ModifierKey] = allCases.filter { $0.side != nil || $0 == .function }
 
     init?(keyCode: UInt16) {
         switch Int(keyCode) {
@@ -26,22 +35,27 @@ enum ModifierKey: String, Codable, CaseIterable, Hashable, Sendable {
         }
     }
 
+    var family: Family {
+        switch self {
+        case .leftControl, .rightControl, .control: .control
+        case .leftOption, .rightOption, .option: .option
+        case .leftShift, .rightShift, .shift: .shift
+        case .leftCommand, .rightCommand, .command: .command
+        case .function: .function
+        }
+    }
+
     var side: Side? {
         switch self {
         case .leftControl, .leftOption, .leftShift, .leftCommand: .left
         case .rightControl, .rightOption, .rightShift, .rightCommand: .right
-        case .function: nil
+        case .control, .option, .shift, .command, .function: nil
         }
     }
 
-    var flag: NSEvent.ModifierFlags {
-        switch self {
-        case .leftControl, .rightControl: .control
-        case .leftOption, .rightOption: .option
-        case .leftShift, .rightShift: .shift
-        case .leftCommand, .rightCommand: .command
-        case .function: .function
-        }
+    // true for "either side" keys, which match a left or a right press alike
+    var isAnySide: Bool {
+        side == nil && self != .function
     }
 
     // the bit NSEvent sets for this exact key, so a press is told from a release without guessing
@@ -56,27 +70,20 @@ enum ModifierKey: String, Codable, CaseIterable, Hashable, Sendable {
         case .leftOption: 0x0020
         case .rightOption: 0x0040
         case .function: NSEvent.ModifierFlags.function.rawValue
+        case .control: 0x2001
+        case .shift: 0x0006
+        case .command: 0x0018
+        case .option: 0x0060
         }
     }
 
     var symbol: String {
-        switch self {
-        case .leftControl, .rightControl: "⌃"
-        case .leftOption, .rightOption: "⌥"
-        case .leftShift, .rightShift: "⇧"
-        case .leftCommand, .rightCommand: "⌘"
+        switch family {
+        case .control: "⌃"
+        case .option: "⌥"
+        case .shift: "⇧"
+        case .command: "⌘"
         case .function: "fn"
-        }
-    }
-
-    // ⌃ ⌥ ⇧ ⌘ is the order macOS uses in menus
-    var sortOrder: Int {
-        switch self {
-        case .leftControl, .rightControl: 0
-        case .leftOption, .rightOption: 1
-        case .leftShift, .rightShift: 2
-        case .leftCommand, .rightCommand: 3
-        case .function: 4
         }
     }
 }

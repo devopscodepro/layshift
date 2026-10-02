@@ -38,14 +38,14 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
         let tabs = NSTabViewController()
         tabs.tabStyle = .toolbar
         tabs.addTabViewItem(tab(
-            ShortcutsSettingsView(sources: sources, settings: settings, shortcuts: shortcuts),
-            title: String(localized: "Shortcuts"),
-            symbol: "keyboard"
-        ))
-        tabs.addTabViewItem(tab(
             GeneralSettingsView(settings: settings, sources: sources, shortcuts: shortcuts),
             title: String(localized: "General"),
             symbol: "gearshape"
+        ))
+        tabs.addTabViewItem(tab(
+            LayoutsSettingsView(sources: sources, settings: settings, shortcuts: shortcuts),
+            title: String(localized: "Layouts"),
+            symbol: "keyboard"
         ))
 
         let window = NSWindow(contentViewController: tabs)

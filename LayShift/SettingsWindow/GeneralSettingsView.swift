@@ -10,11 +10,46 @@ struct GeneralSettingsView: View {
     @State private var needsApproval = LaunchAtLogin.needsApproval
     @State private var inputMonitoring = Permissions.hasInputMonitoring
     @State private var accessibility = Permissions.hasAccessibility
+    @State private var customCycle = false
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         Form {
+            Section {
+                Picker(selection: presetSelection) {
+                    ForEach(CyclePreset.allCases) { preset in
+                        Text(preset.title).tag(preset)
+                        if preset == .none || preset == .controlOption || preset == .shift {
+                            Divider()
+                        }
+                    }
+                } label: {
+                    Text("Next layout")
+                    Text("Press and release the keys to switch to the next layout.")
+                }
+                if showsRecorder {
+                    LabeledContent("Custom shortcut") {
+                        ShortcutRecorder(settings: settings, shortcut: settings.cycleShortcut) { shortcut in
+                            settings.setCycleShortcut(shortcut)
+                            customCycle = shortcut != nil
+                            requestPermissionsIfNeeded(for: shortcut)
+                        }
+                    }
+                }
+                if shortcuts.tapUnavailable {
+                    PermissionNotice(
+                        text: String(localized: "Modifier-only shortcuts need the Input Monitoring permission."),
+                        button: String(localized: "Open System Settings"),
+                        action: Permissions.openInputMonitoringSettings
+                    )
+                }
+            } header: {
+                Text("Switch layouts")
+            } footer: {
+                Text("Shortcuts for individual layouts are on the Layouts tab.")
+            }
+
             Section {
                 Toggle("Launch at Login", isOn: Binding(
                     get: { launchAtLogin },
@@ -86,8 +121,36 @@ struct GeneralSettingsView: View {
         }
     }
 
+    private var showsRecorder: Bool {
+        customCycle || CyclePreset.preset(for: settings.cycleShortcut) == .custom
+    }
+
+    private var presetSelection: Binding<CyclePreset> {
+        Binding(
+            get: { customCycle ? .custom : CyclePreset.preset(for: settings.cycleShortcut) },
+            set: { preset in
+                customCycle = preset == .custom
+                if preset != .custom {
+                    settings.setCycleShortcut(preset.shortcut)
+                    requestPermissionsIfNeeded(for: preset.shortcut)
+                }
+            }
+        )
+    }
+
     private static var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+    }
+
+    // ask at the moment the user needs it, not at launch
+    private func requestPermissionsIfNeeded(for shortcut: Shortcut?) {
+        guard let shortcut else { return }
+        if case .modifiers = shortcut, !Permissions.hasInputMonitoring {
+            Permissions.requestInputMonitoring()
+        }
+        if sources.hasInputMethods, !Permissions.hasAccessibility {
+            Permissions.requestAccessibility()
+        }
     }
 
     private func refresh() {
@@ -104,6 +167,24 @@ struct GeneralSettingsView: View {
             if monitoring { shortcuts.rebind() }
         }
         accessibility = Permissions.hasAccessibility
+    }
+}
+
+struct PermissionNotice: View {
+    let text: String
+    let button: String
+    let action: @MainActor () -> Void
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer()
+            Button(button, action: action)
+                .controlSize(.small)
+        }
     }
 }
 

@@ -129,6 +129,6 @@ struct ShortcutRecorder: View {
     }
 
     private static func keys(in flags: NSEvent.ModifierFlags) -> Set<ModifierKey> {
-        Set(ModifierKey.allCases.filter { flags.rawValue & $0.deviceFlag != 0 })
+        Set(ModifierKey.physical.filter { flags.rawValue & $0.deviceFlag != 0 })
     }
 }
