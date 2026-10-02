@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-02
+
 ### Added
 
 - Menu bar app that switches keyboard layouts with shortcuts. The menu shows the current layout, Settings… and Quit.
@@ -22,3 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Russian localization.
 - MIT license
 - Changelog
+
+[Unreleased]: https://github.com/devopscodepro/layshift/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/devopscodepro/layshift/releases/tag/v1.0.0
