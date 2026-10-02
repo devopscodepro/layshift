@@ -1,6 +1,566 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "A shortcut can be keys like ⌥1, or modifiers pressed and released on their own, like the right ⌘. Layouts come from System Settings → Keyboard → Input Sources." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетание может быть клавишами, например ⌥1, или только модификаторами, нажатыми и отпущенными, например правый ⌘. Раскладки берутся из Системных настроек → Клавиатура → Источники ввода."
+          }
+        }
+      }
+    },
+    "About LayShift" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О LayShift"
+          }
+        }
+      }
+    },
+    "Accessibility" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Универсальный доступ"
+          }
+        }
+      }
+    },
+    "Allow LayShift in System Settings → General → Login Items." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешите LayShift в Системных настройках → Основные → Объекты входа."
+          }
+        }
+      }
+    },
+    "Click to record a shortcut" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите, чтобы записать сочетание"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
+          }
+        }
+      }
+    },
+    "Custom shortcut" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Своё сочетание"
+          }
+        }
+      }
+    },
+    "Custom…" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Другое…"
+          }
+        }
+      }
+    },
+    "fn / 🌐 Globe" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "fn / 🌐"
+          }
+        }
+      }
+    },
+    "For shortcuts made of modifiers only, like ⌃⇧." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для сочетаний только из модификаторов, например ⌃⇧."
+          }
+        }
+      }
+    },
+    "For switching to input methods like Pinyin or Hiragana." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для переключения на методы ввода вроде пиньиня или хираганы."
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Основные"
+          }
+        }
+      }
+    },
+    "Grant…" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выдать…"
+          }
+        }
+      }
+    },
+    "Granted" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выдано"
+          }
+        }
+      }
+    },
+    "Hide LayShift" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыть LayShift"
+          }
+        }
+      }
+    },
+    "Input Monitoring" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мониторинг ввода"
+          }
+        }
+      }
+    },
+    "Launch at Login" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запускать при входе"
+          }
+        }
+      }
+    },
+    "Layouts" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раскладки"
+          }
+        }
+      }
+    },
+    "LayShift" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LayShift"
+          }
+        }
+      }
+    },
+    "LayShift keeps working in the background. To open Settings again, launch LayShift from Launchpad, Spotlight or the Applications folder." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LayShift продолжает работать в фоне. Чтобы снова открыть настройки, запустите LayShift из Launchpad, Spotlight или папки «Программы»."
+          }
+        }
+      }
+    },
+    "LayShift, current layout %@" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LayShift, текущая раскладка %@"
+          }
+        }
+      }
+    },
+    "Left" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Левый"
+          }
+        }
+      }
+    },
+    "macOS also acts on the 🌐 key. Set “Press 🌐 key to” to “Do Nothing” in Keyboard settings." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS тоже реагирует на клавишу 🌐. В настройках клавиатуры выберите для «Нажатие клавиши 🌐» вариант «Ничего не делать»."
+          }
+        }
+      }
+    },
+    "macOS didn't accept %@. Pick a different shortcut." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS не приняла %@. Выберите другое сочетание."
+          }
+        }
+      }
+    },
+    "macOS uses this shortcut to switch input sources." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это сочетание macOS использует для переключения источников ввода."
+          }
+        }
+      }
+    },
+    "Made by Aleksei Popov" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сделал Алексей Попов"
+          }
+        }
+      }
+    },
+    "Modifier-only shortcuts need the Input Monitoring permission." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетаниям только из модификаторов нужно разрешение «Мониторинг ввода»."
+          }
+        }
+      }
+    },
+    "Next layout" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующая раскладка"
+          }
+        }
+      }
+    },
+    "No input source" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет источника ввода"
+          }
+        }
+      }
+    },
+    "None" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет"
+          }
+        }
+      }
+    },
+    "Not needed" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не требуется"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Open Keyboard Settings" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть настройки клавиатуры"
+          }
+        }
+      }
+    },
+    "Open System Settings" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть Системные настройки"
+          }
+        }
+      }
+    },
+    "Permissions" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешения"
+          }
+        }
+      }
+    },
+    "Press and release the keys to switch to the next layout." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите и отпустите клавиши, чтобы перейти к следующей раскладке."
+          }
+        }
+      }
+    },
+    "Press keys, or press and release modifiers. Esc cancels, Delete clears." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите клавиши или нажмите и отпустите модификаторы. Esc — отмена, Delete — убрать."
+          }
+        }
+      }
+    },
+    "Quit LayShift" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Завершить LayShift"
+          }
+        }
+      }
+    },
+    "Remove shortcut" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать сочетание"
+          }
+        }
+      }
+    },
+    "Right" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правый"
+          }
+        }
+      }
+    },
+    "Right ⌘ Command" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правый ⌘ Command"
+          }
+        }
+      }
+    },
+    "Right ⌥ Option" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правый ⌥ Option"
+          }
+        }
+      }
+    },
+    "Settings…" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки…"
+          }
+        }
+      }
+    },
+    "Shortcuts for individual layouts are on the Layouts tab." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетания для отдельных раскладок — на вкладке «Раскладки»."
+          }
+        }
+      }
+    },
+    "Shortcuts paused: %@ uses secure input" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетания приостановлены: %@ использует защищённый ввод"
+          }
+        }
+      }
+    },
+    "Shortcuts paused: secure input is on" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетания приостановлены: включён защищённый ввод"
+          }
+        }
+      }
+    },
+    "Show LayShift in the menu bar" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показывать LayShift в строке меню"
+          }
+        }
+      }
+    },
+    "Switch layouts" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переключение раскладок"
+          }
+        }
+      }
+    },
+    "Switch straight to a layout" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Переход сразу к раскладке"
+          }
+        }
+      }
+    },
+    "Switching to an input method needs the Accessibility permission and the system shortcut “Select the previous input source”." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для переключения на метод ввода нужны разрешение «Универсальный доступ» и системное сочетание «Выбрать предыдущий источник ввода»."
+          }
+        }
+      }
+    },
+    "The menu bar icon is now hidden" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Значок в строке меню скрыт"
+          }
+        }
+      }
+    },
+    "To switch with Caps Lock, turn on “Use the Caps Lock key to switch to and from ABC” in [Keyboard settings](x-apple.systempreferences:com.apple.Keyboard-Settings.extension)." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы переключаться клавишей Caps Lock, включите «Использовать Caps Lock для переключения на ABC и обратно» в [настройках клавиатуры](x-apple.systempreferences:com.apple.Keyboard-Settings.extension)."
+          }
+        }
+      }
+    },
+    "Type shortcut…" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Введите сочетание…"
+          }
+        }
+      }
+    },
+    "Version %@" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия %@"
+          }
+        }
+      }
+    },
+    "Window" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Окно"
+          }
+        }
+      }
+    },
+    "Without the icon, open LayShift again to get back to Settings." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без значка откройте LayShift снова, чтобы вернуться в настройки."
+          }
+        }
+      }
+    }
   },
   "version" : "1.0"
 }

@@ -19,5 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Settings warn when the fn/🌐 key is also used by macOS, point to the system Caps Lock option, and explain how to get back after hiding the menu bar icon.
 - The menu says when secure input (a password field) pauses the shortcuts.
 - App icon and menu bar glyph.
+- Russian localization.
 - MIT license
 - Changelog
