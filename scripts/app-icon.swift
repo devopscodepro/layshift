@@ -25,9 +25,9 @@ func drawKeycap(_ rect: NSRect, depth: CGFloat, face: NSColor, side: NSColor, sh
     if shadow {
         NSGraphicsContext.saveGraphicsState()
         let sh = NSShadow()
-        sh.shadowColor = NSColor.black.withAlphaComponent(0.28)
-        sh.shadowBlurRadius = rect.width * 0.09
-        sh.shadowOffset = NSSize(width: 0, height: -rect.width * 0.05)
+        sh.shadowColor = NSColor.black.withAlphaComponent(0.25)
+        sh.shadowBlurRadius = rect.width * 0.06
+        sh.shadowOffset = NSSize(width: 0, height: -rect.width * 0.04)
         sh.set()
         side.setFill()
         keycapPath(rect.offsetBy(dx: 0, dy: -depth)).fill()
@@ -77,13 +77,14 @@ let image = NSImage(size: NSSize(width: size, height: size), flipped: false) { _
     let ink = color(0x1C2350)
     let accent = color(0xFF8A3D)
 
-    let w = tile.width * 0.5
-    let back = NSRect(x: tile.midX - w * 0.2, y: tile.midY - w * 0.1, width: w, height: w)
-    let front = NSRect(x: tile.midX - w * 0.8, y: tile.midY - w * 0.72, width: w, height: w)
-    drawKeycap(back, depth: tile.height * 0.04, face: face, side: side)
-    drawGlyph("Я", in: back.insetBy(dx: w * 0.1, dy: w * 0.1), color: accent, scale: 0.66)
-    drawKeycap(front, depth: tile.height * 0.04, face: face, side: side)
-    drawGlyph("A", in: front.insetBy(dx: w * 0.1, dy: w * 0.1), color: ink, scale: 0.66)
+    // the pair sits inside a comfortable margin so small sizes stay crisp
+    let w = tile.width * 0.42
+    let back = NSRect(x: tile.midX - w * 0.17, y: tile.midY - w * 0.12, width: w, height: w)
+    let front = NSRect(x: tile.midX - w * 0.83, y: tile.midY - w * 0.78, width: w, height: w)
+    drawKeycap(back, depth: tile.height * 0.035, face: face, side: side)
+    drawGlyph("Я", in: back.insetBy(dx: w * 0.1, dy: w * 0.1), color: accent, scale: 0.7)
+    drawKeycap(front, depth: tile.height * 0.035, face: face, side: side)
+    drawGlyph("A", in: front.insetBy(dx: w * 0.1, dy: w * 0.1), color: ink, scale: 0.7)
     return true
 }
 
