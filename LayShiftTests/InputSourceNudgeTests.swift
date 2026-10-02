@@ -58,3 +58,21 @@ struct InputSourceNudgeTests {
         #expect(store.nudgeFailed)
     }
 }
+
+@MainActor
+struct InputSourceCycleDuringNudgeTests {
+    @Test func nextIsBasedOnTheIntendedSourceWhileTheNudgeSettles() {
+        let service = MockInputSourceService(sources: [.abc, .russian, .hiragana], current: .russian)
+        let store = InputSourceStore(service: service, nudge: MockNudge())
+
+        store.selectNext()
+        #expect(store.current == .hiragana)
+        // the nudge passes through Russian and the notification arrives late
+        service.current = .russian
+        store.refresh()
+        #expect(store.current == .russian)
+
+        store.selectNext()
+        #expect(service.selected.last == .abc)
+    }
+}

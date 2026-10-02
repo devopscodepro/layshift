@@ -11,6 +11,8 @@ final class InputSourceStore: ObservableObject {
     private let service: InputSourceProviding
     private let nudge: InputSourceNudging?
     private let notifications: DistributedNotificationCenter
+    // the nudge makes macOS pass through another source for a moment; remember where we are going
+    private var pending: (source: InputSource, until: Date)?
 
     init(service: InputSourceProviding, nudge: InputSourceNudging? = nil, notifications: DistributedNotificationCenter = .default()) {
         self.service = service
@@ -55,19 +57,26 @@ final class InputSourceStore: ObservableObject {
     }
 
     func select(_ source: InputSource) {
-        let previous = current
+        let previous = pendingSource ?? current
         guard service.select(source) else { return }
         current = source
+        pending = nil
         Log.sources.debug("Selected \(source.id, privacy: .public)")
 
         if Self.needsNudge(from: previous, to: source) {
+            pending = (source, Date().addingTimeInterval(1))
             nudgeFailed = nudge?.nudge() != true
         }
     }
 
     func selectNext() {
-        guard let next = next(after: current) else { return }
+        guard let next = next(after: pendingSource ?? current) else { return }
         select(next)
+    }
+
+    private var pendingSource: InputSource? {
+        guard let pending, pending.until > Date() else { return nil }
+        return pending.source
     }
 
     func next(after source: InputSource?) -> InputSource? {
@@ -84,5 +93,6 @@ final class InputSourceStore: ObservableObject {
 
     @objc private func systemChanged(_ notification: Notification) {
         refresh()
+        Log.sources.debug("System says current is \(self.current?.id ?? "nil", privacy: .public)")
     }
 }

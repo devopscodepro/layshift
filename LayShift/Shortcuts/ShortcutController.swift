@@ -84,7 +84,7 @@ final class ShortcutController: ObservableObject {
             }
             let started = tap.start()
             let granted = Permissions.hasInputMonitoring
-            Log.shortcuts.info("Event tap started: \(started), Input Monitoring granted: \(granted)")
+            Log.shortcuts.info("Event tap started: \(started), Input Monitoring: \(granted), Accessibility: \(Permissions.hasAccessibility)")
             tapUnavailable = !started || !granted
         }
         watchPermission(tapUnavailable)
