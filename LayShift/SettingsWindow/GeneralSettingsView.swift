@@ -93,8 +93,7 @@ struct GeneralSettingsView: View {
 
             Section {
                 HStack(spacing: 10) {
-                    Image(nsImage: NSApplication.shared.applicationIconImage)
-                        .resizable()
+                    Image(nsImage: Self.icon)
                         .frame(width: 36, height: 36)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("LayShift")
@@ -136,6 +135,12 @@ struct GeneralSettingsView: View {
                 }
             }
         )
+    }
+
+    // drawn as vectors at the exact size, so it is crisp on 1x and Retina displays alike
+    private static let icon = NSImage(size: NSSize(width: 36, height: 36), flipped: false) { rect in
+        AppIconDrawing.draw(in: rect)
+        return true
     }
 
     private static var version: String {
